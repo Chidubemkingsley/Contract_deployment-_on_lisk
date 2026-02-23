@@ -11,7 +11,7 @@ contract PropertyManagementScript is Script {
     function setUp() public {}
 
     function run() public {
-        uint256 deployerPrivateKey = 0x89f545254ca9cdfa2241d2ef7d6cfa9cbee2c7f4cbfaacc81222666bbe8ba313;
+        uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
 
         vm.startBroadcast(deployerPrivateKey);
 
