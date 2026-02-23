@@ -1,39 +1,50 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
 
 import {Script} from "forge-std/Script.sol";
-import {console} from "forge-std/console.sol";
 import {PropertyToken, PropertyManagement} from "../src/property_management.sol";
 
-contract PropertyDeploymentScript is Script {
-    PropertyToken public propertyToken;
+contract PropertyManagementScript is Script {
+    PropertyToken      public propertyToken;
     PropertyManagement public propertyManagement;
 
+    function setUp() public {}
+
     function run() public {
-        // Load private key from .env
-        uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
-        
-        // Start broadcasting transactions
+        uint256 deployerPrivateKey = 0x89f545254ca9cdfa2241d2ef7d6cfa9cbee2c7f4cbfaacc81222666bbe8ba313;
+
         vm.startBroadcast(deployerPrivateKey);
 
-        // Step 1: Deploy PropertyToken with initial supply (e.g., 1,000,000 tokens)
-        uint256 initialSupply = 1_000_000;
-        propertyToken = new PropertyToken(initialSupply);
-        
-        console.log("PropertyToken deployed to:", address(propertyToken));
-        console.log("PropertyToken name:", propertyToken.name());
-        console.log("PropertyToken symbol:", propertyToken.symbol());
+        // Deploy token with 1,000,000 initial supply
+        propertyToken = new PropertyToken(1_000_000);
 
-        // Step 2: Deploy PropertyManagement, passing the token address
+        // Deploy management contract with token address
         propertyManagement = new PropertyManagement(address(propertyToken));
-        
-        console.log("PropertyManagement deployed to:", address(propertyManagement));
-        console.log("PropertyManagement token address:", address(propertyManagement.token()));
-        
-        // Optional: Grant AGENT_ROLE to deployer if needed
-        // bytes32 AGENT_ROLE = propertyManagement.AGENT_ROLE();
-        // propertyManagement.grantRole(AGENT_ROLE, msg.sender);
-        // console.log("Granted AGENT_ROLE to deployer");
+
+        vm.stopBroadcast();
+    }
+}// SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.13;
+
+import {Script} from "forge-std/Script.sol";
+import {PropertyToken, PropertyManagement} from "../src/PropertyManagement.sol";
+
+contract PropertyManagementScript is Script {
+    PropertyToken      public propertyToken;
+    PropertyManagement public propertyManagement;
+
+    function setUp() public {}
+
+    function run() public {
+        uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
+
+        vm.startBroadcast(deployerPrivateKey);
+
+        // Deploy token with 1,000,000 initial supply
+        propertyToken = new PropertyToken(1_000_000);
+
+        // Deploy management contract with token address
+        propertyManagement = new PropertyManagement(address(propertyToken));
 
         vm.stopBroadcast();
     }
